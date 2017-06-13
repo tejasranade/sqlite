@@ -1,0 +1,16 @@
+{
+  "name": "sqlite",
+  "version": "1.0.0",
+  "description": "Sqlite generator for node",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Tejas",
+  "license": "ISC",
+  "dependencies": {
+    "kinvey-flex-sdk": "^2.0.4",
+    "node-stopwatch": "0.0.1",
+    "sqlite3": "^3.1.8"
+  }
+}
