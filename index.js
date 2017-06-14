@@ -1,7 +1,11 @@
 var sqlite3 = require('sqlite3');
 const sdk = require('kinvey-flex-sdk');
-var db = new sqlite3.Database('mydb.db');
+var db = new sqlite3.Database('kinveyOffline.sqlite');
 var Stopwatch = require("node-stopwatch").Stopwatch;
+
+const zlib = require('zlib');
+const gzip = zlib.createGzip();
+const fs = require('fs');
 
 var stopwatch = Stopwatch.create();
 stopwatch.start();
@@ -48,7 +52,7 @@ stopwatch.start();
 		var stmt = db.prepare("INSERT INTO hierarchy VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		db.serialize(function(){
-			for (var i=0; i<100000; i++){
+			for (var i=0; i<900000; i++){
 				//values.forEach((value) => {
 				stmt.run([
 					values[0]._id,
@@ -88,8 +92,23 @@ stopwatch.start();
 	console.log("seconds: " + stopwatch.elapsed.seconds);
 	stopwatch.stop();
 
-	db.close();
+	db.close(function (error, result) {
+		if (error) {
+			console.log("DB close error: " + close);
+			throw error;
+		}
+		const istream = fs.createReadStream('./kinveyOffline.sqlite');
+		const ostream = fs.createWriteStream('./kinveyOffline.sqlite.gz', function (error, result) {
+			if (error) {
+				console.log(error);
+				throw error;
+			}
+			return result;
+		});
 
+		istream.pipe(gzip).pipe(ostream);
+
+	});
 	console.log("done");
 
 //});
