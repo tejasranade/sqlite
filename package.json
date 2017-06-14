@@ -4,6 +4,7 @@
   "description": "Sqlite generator for node",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "test"
   },
   "author": "Tejas",
