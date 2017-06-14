@@ -13,6 +13,8 @@ stopwatch.start();
 	db.serialize(function() {
 
 		db.run("CREATE TABLE if not exists hierarchy (_id TEXT, SalesOrganization TEXT, DistributionChannel TEXT, ConditionType TEXT, MaterialNumber TEXT, ValidityStartDate TEXT, ValidityEndDate TEXT, Price TEXT, Currency TEXT, DeliveryUnit TEXT, UnitQuantity TEXT, UnitOfMeasure TEXT, SAPCustomerNumber TEXT, _acl TEXT, _kmd TEXT)");
+		db.run("PRAGMA synchronous = OFF");
+		db.run("PRAGMA journal_mode = MEMORY");
 		// var stmt = db.prepare("INSERT INTO user_info VALUES (?)");
 		// for (var i = 0; i < 10; i++) {
 		//     stmt.run("Ipsum " + i);
@@ -48,7 +50,7 @@ stopwatch.start();
 		var stmt = db.prepare("INSERT INTO hierarchy VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		db.serialize(function(){
-			for (var i=0; i<100000; i++){
+			for (var i=0; i<10; i++){
 				//values.forEach((value) => {
 				stmt.run([
 					values[0]._id,
