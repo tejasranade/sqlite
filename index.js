@@ -12,9 +12,6 @@ const fs = require('fs');
 
 var Kinvey = require('kinvey-node-sdk');
 
-var stopwatch = Stopwatch.create();
-stopwatch.start();
-
 app.get('/', function (req, res) {
   //console.log("Hit root route...");
   res.send('Hello World!')
@@ -116,13 +113,13 @@ app.get('/create', function (req, res) {
 		}
 
 		const istream = fs.createReadStream('./kinveyOffline.sqlite');
-		const ostream = fs.createWriteStream('./kinveyOffline.sqlite.gz', function (error, result) {
-			if (error) {
-				console.log(error);
-				throw error;
-			}
-			return result;
-		});
+		const ostream = fs.createWriteStream('./kinveyOffline.sqlite.gz');//, function (error, result) {
+		// 	if (error) {
+		// 		console.log(error);
+		// 		throw error;
+		// 	}
+		// 	return result;
+		// });
 
 		istream.pipe(gzip).pipe(ostream);
 
