@@ -1,16 +1,25 @@
+const express = require('express')
+const app = express()
+
 var sqlite3 = require('sqlite3');
 const sdk = require('kinvey-flex-sdk');
 var db = new sqlite3.Database('mydb.db');
 var Stopwatch = require("node-stopwatch").Stopwatch;
 
-var stopwatch = Stopwatch.create();
-stopwatch.start();
 
-//sdk.service(function(err, flex) {
+app.get('/', function (req, res) {
+  res.send('Hello World!')
+})
 
-	//const flexFunctions = flex.functions;
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
+})
 
-	db.serialize(function() {
+app.get('/create', function (req, res) {
+	var stopwatch = Stopwatch.create();
+	stopwatch.start();
+
+  	db.serialize(function() {
 
 		db.run("CREATE TABLE if not exists hierarchy (_id TEXT, SalesOrganization TEXT, DistributionChannel TEXT, ConditionType TEXT, MaterialNumber TEXT, ValidityStartDate TEXT, ValidityEndDate TEXT, Price TEXT, Currency TEXT, DeliveryUnit TEXT, UnitQuantity TEXT, UnitOfMeasure TEXT, SAPCustomerNumber TEXT, _acl TEXT, _kmd TEXT)");
 		db.run("PRAGMA synchronous = OFF");
@@ -87,11 +96,17 @@ stopwatch.start();
 		console.log("transaction done");
 	});
 
-	console.log("seconds: " + stopwatch.elapsed.seconds);
+
 	stopwatch.stop();
 
 	db.close();
 
-	console.log("done");
+	res.send("seconds: " + stopwatch.elapsed.seconds);
+})
 
-//});
+// sdk.service(function(err, flex) {
+
+// 	const flexFunctions = flex.functions;
+
+
+// });
