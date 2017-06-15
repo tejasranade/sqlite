@@ -4,7 +4,6 @@ const queue = require('async/queue');
 
 var sqlite3 = require('sqlite3');
 const sdk = require('kinvey-flex-sdk');
-var db = new sqlite3.Database('kinveyOffline.sqlite');
 var Stopwatch = require("node-stopwatch").Stopwatch;
 
 const zlib = require('zlib');
@@ -27,7 +26,7 @@ sdk.service((err, flex) => {
 
 	function doStuff(context, complete, modules){
 		console.log("Hit create route...");
-
+    
 		preProcess();
 
 		const store = modules.dataStore();
@@ -171,7 +170,9 @@ sdk.service((err, flex) => {
 			// 	return result;
 			// });
 
+			console.log("Start Gzip...");
 			istream.pipe(gzip).pipe(ostream);
+			console.log("Finish Gzip.");
 
 			console.log("Start Kinvey...");
 			Kinvey.initialize({
@@ -202,7 +203,8 @@ sdk.service((err, flex) => {
 						var promise = Kinvey.Files.upload(fileContent, metadata)
 						  .then(function(file) {
 						  	console.log("File upload succeeded...");
-						  	console.log(file);						  							  	
+						  	fs.unlinkSync('./kinveyOffline.sqlite.gz');
+						  	fs.unlinkSync('./kinveyOffline.sqlite');
 						  })
 						  .catch(function(error) {
 						  	console.log("File upload error.");
