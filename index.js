@@ -57,10 +57,17 @@ sdk.service((err, flex) => {
   		q.drain = function (){
   			console.log("fetched everything -");
   			console.log(resultSet.length);
-  			postProcess();
 
-  			const cacheReady = modules.dataStore().collection('cacheReady');
-  			const user = modules.requestContext.getAuthenticatedUserId();
+  			const user = context.body.username;//modules.requestContext.getAuthenticatedUserId();
+  			console.log("user -" + user);
+  			postProcess(user);
+
+			const options = {
+			  useBl: true
+			}
+
+  			const cacheReady = modules.dataStore(options).collection('cacheReady');
+  			
 		    cacheReady.save({userId: user}, (err, savedResult) => {
 		      if (err) {
 		        //return complete().setBody(err).runtimeError().done();
@@ -155,7 +162,7 @@ sdk.service((err, flex) => {
 		});
 	}
 
-	function postProcess(){
+	function postProcess(userID){
 		db.close(function (error, result) {
 			if (error) {
 				console.log("DB close error: " + close);
@@ -171,6 +178,7 @@ sdk.service((err, flex) => {
 			// 	return result;
 			// });
 
+			
 			istream.pipe(gzip).pipe(ostream);
 
 			console.log("Start Kinvey...");
@@ -192,7 +200,7 @@ sdk.service((err, flex) => {
 						}
 
 						var metadata ={
-						  _id: '12345',
+						  _id: userID,
 						  filename: 'kinveyOffline.sqlite.gz',
 						  mimeType: 'application/octet-stream',
 						  size: fileContent.length
