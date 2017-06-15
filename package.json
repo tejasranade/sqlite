@@ -9,6 +9,7 @@
   "author": "Tejas",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.4.1",
     "express": "^4.15.3",
     "kinvey-flex-sdk": "^2.0.4",
     "kinvey-node-sdk": "^3.5.0",
